@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block title %}微博文章评论分析{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">关键词微博文章评论分析</h4>
+                        </div>
+                        <div class="header-action">
+                            <i data-toggle="collapse" data-target="#datatable-1" aria-expanded="false">
+                                <svg width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24"
+                                     stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="datatable-1" class="table data-table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>文章ID</th>
+                                    <th>评论内容</th>
+                                    <th>评论用户</th>
+                                    <th>用户ID</th>
+                                    <th>用户IP</th>
+                                    <th>发布时间</th>
+                                    <th>点赞量</th>
+                                    <th>情感分析</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for comment in commentList %}
+                                    <tr>
+
+                                        <!--文章ID-->
+                                        <td style="width:50px">{{ comment[5] }}</td>
+                                        <!--评论内容-->
+                                        <td class="text-center" style="width:200px">{{ comment[1] }}</td>
+                                        <!--评论用户-->
+                                        <td class="text-center" style="width:100px">{{ comment[7] }}</td>
+                                        <!--用户ID-->
+                                        <td>{{ comment[6] }}</td>
+                                        <!--用户IP-->
+                                        <td style="width:100px">{{ comment[3] }}</td>
+                                        <!--发布时间-->
+                                        <td class="text-center" style="width:100px">{{ comment[2] }}</td>
+                                        <!--点赞量-->
+                                        <td class="text-center" style="width:60px">{{ comment[4] }}</td>
+                                        <!--情感分析-->
+                                        <td class="text-center" style="width:80px">
+                                            {% if comment[-1] == '正面' %}
+                                                <span class="text-success">
+                                                    {{ comment[-1] }}
+                                                    </span>
+                                            {% elif comment[-1] == '负面' %}
+                                                <span class="text-danger">
+                                                    {{ comment[-1] }}
+                                                    </span>
+                                            {% else %}
+                                                <span class="text-info">
+                                                    {{ comment[-1] }}
+                                                    </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+<div class="row">
+                    <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">评论用户性别占比</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="xbMain" style="width:100%;height:450px">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">用户评论词云图</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="commentCloudMain" style="width:100%;height:450px;text-align:center">
+                            <img style="width:102%" src="/static/s_comment_cloud.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+</div>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block echarts %}
+
+
+    <script>
+        var chartDom = document.getElementById('xbMain');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '评论性别占比饼图',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    name: '性别个数',
+                    type: 'pie',
+                    radius: '50%',
+                    data: {{ genderData | tojson }},
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+{% endblock %}

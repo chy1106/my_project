@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}微博舆情分析{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">热词微博舆情分析</h4>
+                        </div>
+                        <div class="header-action">
+                            <i data-toggle="collapse" data-target="#datatable-1" aria-expanded="false">
+                                <svg width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24"
+                                     stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table id="datatable-1" class="table data-table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>文章ID</th>
+                                    <th>文章内容</th>
+                                    <th>文章作者</th>
+                                    <th>用户IP</th>
+                                    <th>类型</th>
+                                    <th>发布时间</th>
+                                    <th>转发量</th>
+                                    <th>评论量</th>
+                                    <th>点赞量</th>
+                                    <th>情感分析</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for article in articleList %}
+                                    <tr>
+                                        <td>{{ article[0] }}</td>
+                                        <td>{{ article[1] }}</td>
+                                        <td style="width:100px">{{ article[10] }}</td>
+                                        <td style="width:100px">{{ article[5] }}</td>
+                                        <td style="width:50px">{{ article[7] }}</td>
+                                        <td class="text-center" style="width:100px">{{ article[6] }}</td>
+                                        <td class="text-center" style="width:60px">{{ article[2] }}</td>
+                                        <td class="text-center" style="width:60px">{{ article[3] }}</td>
+                                        <td class="text-center" style="width:60px">{{ article[4] }}</td>
+                                        <td class="text-center" style="width:80px">
+                                            {% if article[-1] == '正面' %}
+                                                <span class="text-success">
+                                                    {{ article[-1] }}
+                                                    </span>
+                                            {% elif article[-1] == '负面' %}
+                                                <span class="text-danger">
+                                                    {{ article[-1] }}
+                                                    </span>
+                                            {% else %}
+                                                <span class="text-info">
+                                                    {{ article[-1] }}
+                                                    </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

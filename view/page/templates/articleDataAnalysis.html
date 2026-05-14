@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% block title %}微博文章分析{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mb-4 mt-1">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <h4 class="font-weight-bold">热词微博文章分析</h4>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12 col-md-12">
+            <div class="card card-block card-stretch card-height">
+                <div class="card-body p-10">
+                    <div>
+                        <label>文章分类选择：</label>
+
+                        <select onchange="changeHotWord(event)">
+                            {% for arcType in arcTypeList %}
+                                <option {{ 'selected' if arcType == defaultArcType else '' }}
+                                value="{{ arcType }}" >{{ arcType }}</option>
+                            {% endfor %}
+                        </select>
+                    <script>
+                                function changeHotWord(e) {
+                                    window.location.href = 'http://localhost:5000/page/articleDataAnalysis?arcType=' + e.target.value
+                                }
+                            </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图表行 -->
+    <div class="row">
+        <!-- 转发量柱状图 -->
+        <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">文章转发量分析</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="zfmain" style="width:100%;height:450px">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- 地图传播图 -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="header-title">
+                        <h4 class="card-title">微博热词转发分析 - 地域传播图</h4>
+                        <p class="mb-0 text-muted small">基于中国地图的跨地域转发路径</p>
+                    </div>
+                    <div class="header-action">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="initMapChart()">
+                            <svg width="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="vertical-align: middle;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            刷新数据
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="repostMapChart" style="width: 100%; height: 700px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block echarts %}
+
+<!-- 引入中国地图数据 -->
+<script src="{{ url_for('static', filename='js/china1.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script>
+        var chartDom = document.getElementById('zfmain');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '转发量区间分析图'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+
+            legend: {},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: {{ xZfData |tojson }}
+            },
+            series: [
+                {
+                    name: '转发个数',
+                    type: 'bar',
+                    data: {{ yZfData }}
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    </script>
+
+    <script>
+    var myChart = null;
+
+    function initMapChart() {
+
+        const chartDom = document.getElementById('repostMapChart');
+
+        // 强制设置图表容器样式
+        chartDom.style.display = 'block';
+        chartDom.style.width = '100%';
+        chartDom.style.height = '700px';
+        chartDom.style.visibility = 'visible';
+        chartDom.style.opacity = '1';
+
+        // 延迟执行，确保 DOM 样式应用完毕
+        setTimeout(() => {
+            try {
+                // 检查环境
+                if (typeof echarts === 'undefined') throw new Error("ECharts 库未加载");
+                if (!echarts.getMap('china')) {
+                    const maps = Object.keys(echarts.maps || {});
+                    throw new Error(`地图 'china' 未注册！已注册: [ ${maps.join(', ')} ]`);
+                }
+
+                console.log("地图资源准备就绪，开始渲染...");
+
+                // 销毁旧实例防止内存泄漏或重叠
+                if (myChart) {
+                    myChart.dispose();
+                }
+
+                // 初始化
+                myChart = echarts.init(chartDom);
+
+                // 获取当前页面的arcType
+                const currentArcType = "{{ defaultArcType }}";
+
+                // 发起请求
+                fetch('/page/repostAnalysis?arcType=' + encodeURIComponent(currentArcType))
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("地图数据获取成功:", data);
+
+                        if (data.nodes && data.edges) {
+                            renderChart(data.nodes, data.edges);
+                        } else {
+                            console.warn("数据格式不正确，没有 nodes 或 edges");
+                        }
+                    })
+                    .catch(err => console.error("地图加载失败:", err));
+
+            } catch (err) {
+                console.error("初始化失败:", err);
+            }
+        }, 300);
+    }
+
+
+    function renderChart(nodes, edges) {
+        const geoCoordMap = {};
+        nodes.forEach(node => {
+            geoCoordMap[node.name] = node.value;
+        });
+
+        const convertData = (data) => {
+            return data.map(item => {
+                const from = geoCoordMap[item.source];
+                const to = geoCoordMap[item.target];
+                if (from && to) {
+                    return {
+                        name: item.source + ' > ' + item.target,
+                        fromName: item.source,
+                        toName: item.target,
+                        coords: [from, to],
+                        value: item.value
+                    };
+                }
+                return null;
+            }).filter(i => i !== null);
+        };
+
+        const lineData = convertData(edges);
+
+
+        const isDark = document.body.classList.contains('dark') ||
+                       (window.getComputedStyle(document.body).backgroundColor === 'rgb(11, 15, 25)');
+
+        const colors = {
+            bg: isDark ? '#0b0f19' : '#ffffff',
+            text: isDark ? '#ffffff' : '#333333',
+            mapArea: isDark ? '#1c2536' : '#f5f7fa',
+            mapBorder: isDark ? '#3b5066' : '#cccccc',
+            line: isDark ? '#ffeb3b' : '#d93025',
+            effect: isDark ? '#ffeb3b' : '#d93025'
+        };
+
+        myChart.setOption({
+            backgroundColor: colors.bg,
+            tooltip: {
+                trigger: 'item',
+                formatter: params => {
+                    if (params.seriesType === 'lines') {
+                        return `<strong>${params.data.fromName} ➝ ${params.data.toName}</strong><br/>转发量: ${params.data.value}`;
+                    }
+                    return params.name;
+                },
+                backgroundColor: 'rgba(50,50,50,0.9)',
+                textStyle: { color: '#fff' }
+            },
+            geo: {
+                map: 'china',
+                roam: true,
+                zoom: 1.2,
+                label: { show: false },
+                itemStyle: {
+                    areaColor: colors.mapArea,
+                    borderColor: colors.mapBorder,
+                    borderWidth: 1
+                },
+                emphasis: {
+                    itemStyle: { areaColor: isDark ? '#2a333d' : '#e0e0e0' }
+                }
+            },
+            series: [
+                {
+                    type: 'lines',
+                    zlevel: 1,
+                    effect: {
+                        show: true,
+                        period: 6,
+                        trailLength: 0.7,
+                        color: colors.effect,
+                        symbolSize: 3
+                    },
+                    lineStyle: {
+                        color: colors.line,
+                        width: 0,
+                        curveness: 0.2
+                    },
+                    data: lineData
+                },
+                {
+                    type: 'lines',
+                    zlevel: 2,
+                    symbol: ['none', 'arrow'],
+                    symbolSize: 8,
+                    lineStyle: {
+                        color: colors.line,
+                        width: 1,
+                        curveness: 0.2
+                    },
+                    data: lineData
+                },
+                {
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    rippleEffect: { brushType: 'stroke', scale: 3 },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{b}',
+                        color: colors.text,
+                        fontSize: 10
+                    },
+                    itemStyle: { color: colors.line, shadowBlur: 10, shadowColor: '#333' },
+                    data: nodes
+                }
+            ]
+        });
+    }
+
+    // 窗口大小自适应
+    window.addEventListener('resize', () => {
+        if(myChart) myChart.resize();
+    });
+
+    // 页面加载完成后启动
+    document.addEventListener('DOMContentLoaded', initMapChart);
+    </script>
+
+    <script>
+    $(document).ready(function() {
+    // 获取当前页面的arcType
+
+    var currentType = "{{ defaultArcType }}";
+
+    // 发起AJAX请求去调用repostAnalysis
+    $.ajax({
+        url: '/page/repostAnalysis',
+        data: { arcType: currentType },
+        method: 'GET',
+        success: function(response) {
+            //拿到数据后，渲染图表
+            console.log("收到转发数据:", response);
+
+        }
+    });
+});
+    </script>
+
+{% endblock %}

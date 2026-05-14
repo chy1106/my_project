@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% block title %}微博文章转发分析{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">关键词微博转发信息分析</h4>
+                    </div>
+                    <div class="header-action">
+                        <i data-toggle="collapse" data-target="#datatable-1" aria-expanded="false">
+                            <svg width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                            </svg>
+                        </i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table id="datatable-1" class="table data-table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>文章ID</th>
+                                <th>文章作者</th>
+                                <th>转发用户</th>
+                                <th>文章IP</th>
+                                <th>用户IP</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for repost in repostList %}
+                                <tr>
+
+                                    <!--文章ID-->
+                                    <td style="width:50px">{{ repost[0] }}</td>
+                                    <td class="text-center" style="width:100px">{{ repost[1] }}</td>
+                                    <!--评论用户-->
+                                    <td class="text-center" style="width:100px">{{ repost[2] }}</td>
+                                    <!--文章IP-->
+                                    <td style="width:100px">{{ repost[3] }}</td>
+                                    <!--用户IP-->
+                                    <td style="width:100px">{{ repost[4] }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="header-title">
+                        <h4 class="card-title">关键词微博转发分析 - 地域传播图</h4>
+                        <p class="mb-0 text-muted small">基于中国地图的跨地域转发路径</p>
+                    </div>
+                    <div class="header-action">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="initMapChart()">
+                            <svg width="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="vertical-align: middle;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            刷新数据
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="card-body">
+                    <!-- 图表容器 -->
+                    <div id="repostMapChart" style="width: 100%; height: 700px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block echarts %}
+    <!--引入本地 china.js -->
+    <script src="{{ url_for('static', filename='js/china.js') }}"></script>
+
+    <script>
+    var myChart = null;
+
+    function initMapChart() {
+
+        const chartDom = document.getElementById('repostMapChart');
+
+        // 强制设置图表容器样式
+        chartDom.style.display = 'block';
+        chartDom.style.width = '100%';
+        chartDom.style.height = '700px';
+        chartDom.style.visibility = 'visible';
+        chartDom.style.opacity = '1';
+
+        // 延迟执行，确保 DOM 样式应用完毕
+        setTimeout(() => {
+            try {
+                // 检查环境
+                if (typeof echarts === 'undefined') throw new Error("ECharts 库未加载");
+                if (!echarts.getMap('china')) {
+                    const maps = Object.keys(echarts.maps || {});
+                    throw new Error(`地图 'china' 未注册！已注册: [ ${maps.join(', ')} ]`);
+                }
+
+                console.log("地图资源准备就绪，开始渲染...");
+
+                // 销毁旧实例防止内存泄漏或重叠
+                if (myChart) {
+                    myChart.dispose();
+                }
+
+                // 初始化
+                myChart = echarts.init(chartDom);
+
+                fetch('/page/repostRouteAnalysis')
+                    .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("数据获取成功:", data);
+                if (data.nodes && data.nodes.length > 0) {
+                    renderChart(data.nodes, data.edges);
+                }
+
+                console.log(` 加载成功：${nodes.length} 个节点，${edges.length} 条连线`);
+                renderChart(nodes, edges);
+            })
+
+
+                //先打印尺寸，再切换显示状态
+                const width = chartDom.offsetWidth;
+                const height = chartDom.offsetHeight;
+                console.log(`容器当前尺寸: ${width} x ${height}`);
+
+
+                // 再次强制 resize，确保在 display:block 后重新计算
+                setTimeout(() => {
+                    myChart.resize();
+                    console.log("地图渲染完成并调整大小！");
+                }, 50);
+
+            } catch (err) {
+                console.error("渲染失败:", err);
+
+            }
+        }, 300); //延长延迟
+    }
+
+    function renderChart(nodes, edges) {
+        const geoCoordMap = {};
+        nodes.forEach(node => {
+            geoCoordMap[node.name] = node.value;
+        });
+
+        const convertData = (data) => {
+            return data.map(item => {
+                const from = geoCoordMap[item.source];
+                const to = geoCoordMap[item.target];
+                if (from && to) {
+                    return {
+                        name: item.source + ' > ' + item.target,
+                        fromName: item.source,
+                        toName: item.target,
+                        coords: [from, to],
+                        value: item.value
+                    };
+                }
+                return null;
+            }).filter(i => i !== null);
+        };
+
+        const lineData = convertData(edges);
+
+
+        const isDark = document.body.classList.contains('dark') ||
+                       (window.getComputedStyle(document.body).backgroundColor === 'rgb(11, 15, 25)');
+
+        const colors = {
+            bg: isDark ? '#0b0f19' : '#ffffff',
+            text: isDark ? '#ffffff' : '#333333',
+            mapArea: isDark ? '#1c2536' : '#f5f7fa',
+            mapBorder: isDark ? '#3b5066' : '#cccccc',
+            line: isDark ? '#ffeb3b' : '#d93025',
+            effect: isDark ? '#ffeb3b' : '#d93025'
+        };
+
+        myChart.setOption({
+            backgroundColor: colors.bg,
+            tooltip: {
+                trigger: 'item',
+                formatter: params => {
+                    if (params.seriesType === 'lines') {
+                        return `<strong>${params.data.fromName} ➝ ${params.data.toName}</strong><br/>转发量: ${params.data.value}`;
+                    }
+                    return params.name;
+                },
+                backgroundColor: 'rgba(50,50,50,0.9)',
+                textStyle: { color: '#fff' }
+            },
+            geo: {
+                map: 'china',
+                roam: true,
+                zoom: 1.2,
+                label: { show: false },
+                itemStyle: {
+                    areaColor: colors.mapArea,
+                    borderColor: colors.mapBorder,
+                    borderWidth: 1
+                },
+                emphasis: {
+                    itemStyle: { areaColor: isDark ? '#2a333d' : '#e0e0e0' }
+                }
+            },
+            series: [
+                {
+                    type: 'lines',
+                    zlevel: 1,
+                    effect: {
+                        show: true,
+                        period: 6,
+                        trailLength: 0.7,
+                        color: colors.effect,
+                        symbolSize: 3
+                    },
+                    lineStyle: {
+                        color: colors.line,
+                        width: 0,
+                        curveness: 0.2
+                    },
+                    data: lineData
+                },
+                {
+                    type: 'lines',
+                    zlevel: 2,
+                    symbol: ['none', 'arrow'],
+                    symbolSize: 8,
+                    lineStyle: {
+                        color: colors.line,
+                        width: 1,
+                        curveness: 0.2
+                    },
+                    data: lineData
+                },
+                {
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    rippleEffect: { brushType: 'stroke', scale: 3 },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{b}',
+                        color: colors.text,
+                        fontSize: 10
+                    },
+                    itemStyle: { color: colors.line, shadowBlur: 10, shadowColor: '#333' },
+                    data: nodes
+                }
+            ]
+        });
+    }
+
+    // 窗口大小自适应
+    window.addEventListener('resize', () => {
+        if(myChart) myChart.resize();
+    });
+
+    // 页面加载完成后启动
+    document.addEventListener('DOMContentLoaded', initMapChart);
+    </script>
+{% endblock %}
