@@ -45,12 +45,10 @@ def home():
     str=' '.join(top50CommentUserNameList)
     wordcloudUtil.genWordCloudPic(str,'comment_user_cloud.jpg')
 
-
     return render_template('index.html',
                            xAxis7ArticleData=xAxis7ArticleData,
                            yAxis7ArticleData=yAxis7ArticleData,
                            arcTypeData=arcTypeData)
-
 
 @pb.route('/homePageData')
 def getHomePageData():
@@ -60,7 +58,6 @@ def getHomePageData():
     topRegion= articleDao.getTopRegion()
     topArticles= articleDao.getArticleTopZan()
     return jsonify(totalArticle=totalArticle,topAuthor=topAuthor,topRegion=topRegion,topArticles=topArticles)
-
 
 @pb.route('/hotWord')
 def hotWord():
@@ -76,7 +73,6 @@ def hotWord():
     for value in df.values:
         if defaultHotWord == value[0]:
             hotwordNum = value[1]
-
     # 情感分析
     sentiments = ''
     stc = SnowNLP(defaultHotWord).sentiments
