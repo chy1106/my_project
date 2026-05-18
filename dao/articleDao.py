@@ -41,7 +41,6 @@ def getAllArticle():
     finally:
         dbUtil.closeCon(con)
 
-
 def getTotalArticle():
     '''获取帖子总数'''
     con = None
@@ -57,7 +56,6 @@ def getTotalArticle():
         return None
     finally:
         dbUtil.closeCon(con)
-
 
 def getTopAuthor():
     '''获取点赞最高微博作者'''
@@ -75,8 +73,6 @@ def getTopAuthor():
     finally:
         dbUtil.closeCon(con)
 
-
-
 def getTopRegion():
     '''获取点赞最高城市'''
     con = None
@@ -92,7 +88,6 @@ def getTopRegion():
         return None
     finally:
         dbUtil.closeCon(con)
-
 
 def getArticleTopZan():
     '''获取点赞最高6条'''
