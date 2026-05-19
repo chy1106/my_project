@@ -32,8 +32,6 @@ def init_csv():
             'userHomeUrl'  # 评论用户主页地址
         ])
 
-
-
 def getJsonHtml(url,params,cookie):
     '''请求获取html内容，json格式'''
     headers = {
