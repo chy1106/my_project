@@ -24,8 +24,6 @@ def login(user:User):
     finally:
         dbUtil.closeCon(con)
 
-
-
 def add(user:User):
     '''
     用户注册添加功能
@@ -44,7 +42,6 @@ def add(user:User):
         return None
     finally:
         dbUtil.closeCon(con)
-
 
 def getByUserName(username):
     '''

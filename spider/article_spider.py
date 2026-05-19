@@ -16,7 +16,6 @@ def clear_csv():
     with open("data/article_data.csv", 'w', encoding='utf8') as f:
         f.truncate()  # 直接截断文件内容
 
-
 def init_csv():
     '''
     初始化操作，判断csv文件是否存在，不存在就创建
@@ -53,7 +52,6 @@ def getJsonHtml(url,params,cookie):
     else:
         return None
 
-
 def getAllTypeList():
     '''
     获取所有类别信息
@@ -77,7 +75,6 @@ def writeToCsv(row):
         writer= csv.writer(file)
         writer.writerow(row)
 
-
 def parseJson(json,articleType):
     '''
     解析json数据
@@ -93,16 +90,13 @@ def parseJson(json,articleType):
         attitudes_count = article['attitudes_count']
         region_name=article.get('region_name','发布于').replace('发布于','').strip()
         created_at=datetime.strptime(article['created_at'],'%a %b %d %H:%M:%S %z %Y').strftime('%Y-%m-%d %H:%M:%S')
-
         articleUrl='https://weibo.com/%s/%s'%(article['user']['id'],article['mblogid'])
         authorId=article['user']['id']
         authorName=article['user']['screen_name']
         authorHomeUrl='https://weibo.com/u/%s'%article['user']['id']
-
         writeToCsv([
             id,text_raw,reposts_count,comments_count,attitudes_count,region_name,created_at,articleType,articleUrl,authorId,authorName,authorHomeUrl
         ])
-
 
 #读取cookie
 def readCookie():
@@ -126,11 +120,7 @@ def start():
             'extparam': 'discover|new_feed'
         }
         jsonHtml=getJsonHtml(url,params,cookie)
-
         parseJson(jsonHtml,articleType[0])
-
-
-
     print("内容爬取结束")
 
 if __name__ == '__main__':

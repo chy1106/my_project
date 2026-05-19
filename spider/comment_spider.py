@@ -26,7 +26,6 @@ def init_csv():
     初始化操作，判断csv文件是否存在，不存在就创建
     :return:
     '''
-
     with open('data/comment_data.csv', 'w',encoding='utf8',newline='') as file:
         writer = csv.writer(file)
         writer.writerow([
@@ -67,9 +66,6 @@ def writeToCsv(row):
         writer= csv.writer(file)
         writer.writerow(row)
 
-
-
-
 def parseJson(json,articleId):
     '''
     解析json数据
@@ -91,7 +87,6 @@ def parseJson(json,articleId):
         if g=='f':
             gender='女'
         userHomeUrl='https://weibo.com/u/%s'%comment['user']['id']
-
         writeToCsv([
             id, text_raw, created_at,source,like_counts,articleId,userId, userName,gender,userHomeUrl
         ])
@@ -104,7 +99,6 @@ def getAllArticleList():
     :return:
     '''
     articleList = []
-
     with open('data/article_data.csv', 'r', encoding='utf8', newline='') as file:
         reader = csv.reader(file)
         next(reader)
@@ -118,7 +112,6 @@ def readCookie():
         reader = csv.reader(file)
         for cookie in reader:
             return cookie[0]
-
 
 def start():
     clear_csv()
@@ -140,11 +133,7 @@ def start():
             jsonHtml= getJsonHtml(url,params,cookie)
             if jsonHtml:
                 parseJson(jsonHtml,article[0])
-
     print("评论信息爬取结束")
 
-
-
 if __name__ == '__main__':
-
     start()

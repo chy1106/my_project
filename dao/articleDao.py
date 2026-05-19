@@ -23,8 +23,6 @@ def getArticleByArcType(arcType):
     finally:
         dbUtil.closeCon(con)
 
-
-
 def getAllArticle():
     '''查询所有帖子信息'''
     con = None
@@ -105,7 +103,6 @@ def getArticleTopZan():
     finally:
         dbUtil.closeCon(con)
 
-
 def get7DayArticle():
     '''获取最近7天帖子数量'''
     con = None
@@ -122,7 +119,6 @@ def get7DayArticle():
     finally:
         dbUtil.closeCon(con)
 
-
 def getArticleTypeAmount():
     '''获取帖子类别数量'''
     con = None
@@ -138,7 +134,6 @@ def getArticleTypeAmount():
         return None
     finally:
         dbUtil.closeCon(con)
-
 
 def getAllSpecificArticle():
     '''查询所有帖子信息'''

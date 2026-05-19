@@ -26,7 +26,6 @@ def init_csv():
             '类别标题',
             '分组id',
             '分类id',
-
         ])
 
 def getJsonHtml(url,cookie):
@@ -51,8 +50,6 @@ def writeToCsv(arcType):
     with open('data/arcType_data.csv', 'a', encoding='utf8', newline='') as file:
         writer= csv.writer(file)
         writer.writerow(arcType)
-
-
 
 def parseJson(json):
     '''
@@ -85,7 +82,6 @@ def start():
     init_csv()
     url='https://weibo.com/ajax/feed/allGroups'
     jsonhtml=getJsonHtml(url,cookie)
-
     parseJson(jsonhtml)
 
 

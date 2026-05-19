@@ -27,7 +27,6 @@ def getAllComment():
     finally:
         dbUtil.closeCon(con)
 
-
 def getTopCommentUser():
     '''
     获取前50评论用户名
@@ -46,7 +45,6 @@ def getTopCommentUser():
         return None
     finally:
         dbUtil.closeCon(con)
-
 
 def getCommentFenci():
     '''
@@ -67,8 +65,6 @@ def getCommentFenci():
     finally:
         dbUtil.closeCon(con)
 
-
-
 def getCommentHotWordAmount(hotword):
     """
     获取日期用户热词评论量
@@ -87,7 +83,6 @@ def getCommentHotWordAmount(hotword):
         return None
     finally:
         dbUtil.closeCon(con)
-
 
 def getCommentByHotWord(hotword):
     """
@@ -108,7 +103,6 @@ def getCommentByHotWord(hotword):
     finally:
         dbUtil.closeCon(con)
 
-
 def getAllSpecificComment():
     '''
     获取所有爬取评论信息
@@ -127,7 +121,6 @@ def getAllSpecificComment():
         return None
     finally:
         dbUtil.closeCon(con)
-
 
 def getSpecificFenci():
     '''

@@ -16,7 +16,6 @@ from spider.comment_spider import start as commentspiderStart
 from spider.respost_spider import start as repostspiderStart
 
 engine=create_engine('mysql+pymysql://root:123456@localhost:3306/weibo?charset=utf8')
-
 '''
 持久化到数据库，先合并数据库和csv文件，去重，最后存数据库，删除csv文件
 :return:
@@ -52,14 +51,12 @@ def saveToDb():
         resultRepostPd = concatRepostPd.drop_duplicates(subset='articleId', keep='last')
         '''存库'''
         resultRepostPd.to_sql('s_repost', con=engine, if_exists='replace', index=False)
-
     except Exception as e:
         print("异常",e)
         traceback.print_exc()
         newArticleCsv= pd.read_csv('data/article_data.csv')
         newCommentCsv= pd.read_csv('data/comment_data.csv')
         newRepostCsv= pd.read_csv('data/repost_data.csv')
-
         newArticleCsv.to_sql('t_article',con=engine,if_exists='replace',index=False)
         newCommentCsv.to_sql('t_comment',con=engine,if_exists='replace',index=False)
         newRepostCsv.to_sql('t_repost',con=engine,if_exists='replace',index=False)
@@ -68,19 +65,15 @@ def start():
     print("热词爬取开始")
     typespiderStart()
     print("热词爬取结束")
-
     print("内容爬取开始")
     articlespiderStart()
     print("内容爬取结束")
-
     print("评论爬取开始")
     commentspiderStart()
     print("评论爬取结束")
-
     print("转发爬取开始")
     repostspiderStart()
     print("转发爬取结束")
-
     print("持久化开始")
     saveToDb()
     print("持久化结束")

@@ -60,8 +60,6 @@ def getRepost(articleType):
     finally:
         dbUtil.closeCon(con)
 
-
-
 def getRepostData():
     '''查询转发信息'''
     con = None
@@ -82,7 +80,6 @@ def getRepostData():
         return None
     finally:
         dbUtil.closeCon(con)
-
 
 def getRepostRoute():
     '''查询转发路径'''

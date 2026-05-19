@@ -19,14 +19,11 @@ def outCommentFreToCsv(sorted_wfc_list):
     df=pd.DataFrame(sorted_wfc_list,columns=['热词','数量'])
     df.to_csv('fenci/comment_fre.csv',index=False)
 
-
-
 def getStopWordList():
     '''
     获取停顿词
     '''
     return [line.strip() for line in open('fenci/stopWords.txt',encoding='utf-8').readlines()]
-
 
 def cut_comment():
     '''
@@ -51,8 +48,6 @@ def word_fre_count():
         number=re.search('\d+', seg)
         if not number and seg not in stopWordList and len(seg)>1:
             new_seg_list.append(seg)
-
-
     '''词频统计'''
     wfc={}
     for w in set(new_seg_list):
