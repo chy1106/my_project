@@ -22,7 +22,6 @@ def remove_urls_clean(text):
     #清理连续空格和空行
     return re.sub(r'\s+','',no_urls).strip()
 
-
 def clean_string(text):
     text=remove_urls_clean(text)
     text=remove_all_tags(text)

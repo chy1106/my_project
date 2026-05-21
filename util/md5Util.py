@@ -3,7 +3,6 @@ import hashlib
 class MD5Utility:
     @staticmethod
     def encrypt(text: str, encoding: str = 'utf-8') -> str:
-
         try:
             # 创建MD5对象
             md5 = hashlib.md5()
@@ -17,7 +16,6 @@ class MD5Utility:
 
     @staticmethod
     def verify(text: str, md5_hash: str, encoding: str = 'utf-8') -> bool:
-
         # 计算文本的MD5值
         encrypted = MD5Utility.encrypt(text, encoding)
         # 比较计算得到的MD5值与给定的MD5值

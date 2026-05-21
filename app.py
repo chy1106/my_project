@@ -12,7 +12,6 @@ app.secret_key='admin'
 app.register_blueprint(page.pb)
 app.register_blueprint(user.ub)
 
-
 @app.before_request
 def before_request():
     """
@@ -30,7 +29,6 @@ def before_request():
     if user:
         return None
     return redirect('/user/login')
-
 
 if __name__ == '__main__':
     app.run()

@@ -15,22 +15,16 @@ def genWordCloudPic(str, outImg):
     :param outImg: 输出的词云图文件名
     :return:
     """
-
-
     wc = WordCloud(
         width=800,
         height=600,
         background_color='white',
         colormap='Blues',
-        font_path='STHUPO.TTF',
-
+        font_path='STHUPO.TTF'
     )
     wc.generate_from_text(str)
-
     # 绘制图片
     plt.imshow(wc)
-
     # 不显示坐标轴
     plt.axis('off')
-
     plt.savefig( './static/' + outImg, dpi=500)
