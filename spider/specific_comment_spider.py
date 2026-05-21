@@ -18,12 +18,12 @@ from util.stringUtil import clean_string
 def clear_csv():
     with open("data/specificComment_data.csv", 'w', encoding='utf8') as f:
         f.truncate()  # 直接截断文件内容
+
 def init_csv():
     '''
     初始化操作，判断csv文件是否存在，不存在就创建
     :return:
     '''
-
     with open('data/specificComment_data.csv', 'w',encoding='utf8',newline='') as file:
         writer = csv.writer(file)
         writer.writerow([
@@ -38,8 +38,6 @@ def init_csv():
             'gender',  # 性别
             'userHomeUrl'  # 评论用户主页地址
         ])
-
-
 
 def getJsonHtml(url,params,cookie):
     '''请求获取html内容，json格式'''
@@ -85,12 +83,9 @@ def parseJson(json,articleId):
         if g=='f':
             gender='女'
         userHomeUrl='https://weibo.com/u/%s'%comment['user']['id']
-
         writeToCsv([
             id, text_raw, created_at,source,like_counts,articleId,userId, userName,gender,userHomeUrl
         ])
-
-
 
 def getAllArticleList():
     '''
@@ -98,13 +93,13 @@ def getAllArticleList():
     :return:
     '''
     articleList = []
-
     with open('data/specificArticle_data.csv', 'r', encoding='utf8', newline='') as file:
         reader = csv.reader(file)
         next(reader)
         for article in reader:
             articleList.append(article)
     return articleList
+
 #读取cookie
 def readCookie():
     with open('data/Cookie.csv', 'r', encoding='utf8', newline='') as file:
@@ -119,7 +114,6 @@ def start():
     init_csv()
     articleList = getAllArticleList()
     print("评论信息爬取开始")
-
     for article in articleList:
         print("正在爬取标题为：【%s】的微博评论" % article[1])
         time.sleep(1)
@@ -130,10 +124,7 @@ def start():
         jsonHtml = getJsonHtml(url, params,cookie)
         if jsonHtml:
             parseJson(jsonHtml, article[0])
-
     print("评论信息爬取结束")
-
-
 
 if __name__ == '__main__':
     start()

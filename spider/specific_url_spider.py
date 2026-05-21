@@ -21,16 +21,13 @@ def init_csv():
         with open('data/article_URL.csv', 'w',encoding='utf8',newline='') as file:
             csv.writer(file)
 
-
 def writeToCsv(url):
     '''
     写入csv操作
-
     '''
     with open('data/article_URL.csv', 'a', encoding='utf8', newline='') as file:
         writer= csv.writer(file)
         writer.writerow([url])
-
 
 def readCookie():
     with open('data/Cookie.csv', 'r', encoding='utf8', newline='') as file:
@@ -39,8 +36,6 @@ def readCookie():
             return cookie[0]
 
 def start(keyword):
-
-
     print(keyword)
     cookie= readCookie()
     clear_csv()
@@ -51,10 +46,8 @@ def start(keyword):
         'referer': 'https://weibo.com/'
     }
     response = requests.get(url=url, headers=headers)
-
     page = BeautifulSoup(response.content.decode('utf-8','ignore'), 'html.parser')
     url_list = page.find_all('div', attrs={'class': 'from'})
-
     init_csv()
     for url in url_list:
         #使用beautifulsoup从url中提取<a>标签内容
@@ -64,12 +57,8 @@ def start(keyword):
         writeToCsv(article_url)
         print(article_url)
 
-
-
-
 if __name__ == '__main__':
     keyword=None
-
     start(keyword)
 
 

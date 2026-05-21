@@ -35,8 +35,6 @@ def login():
         else:
             return jsonify(error=True, info="用户名或密码错误")
 
-
-
 @ub.route('/register',methods=['GET','POST'])
 def register():
     '''
@@ -66,7 +64,6 @@ def register():
                 return jsonify(success=True,info='ok')
             else:
                 return jsonify(error=True, info="注册失败")
-
 
 @ub.route('/logout',methods=['GET','POST'])
 def logout():

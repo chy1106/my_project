@@ -13,7 +13,7 @@ from sqlalchemy import create_engine
 from spider.arcType_spider import start as typespiderStart
 from spider.article_spider import start as articlespiderStart
 from spider.comment_spider import start as commentspiderStart
-from spider.respost_spider import start as repostspiderStart
+from spider.repost_spider import start as repostspiderStart
 
 engine=create_engine('mysql+pymysql://root:123456@localhost:3306/weibo?charset=utf8')
 '''

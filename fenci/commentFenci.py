@@ -53,7 +53,6 @@ def word_fre_count():
     for w in set(new_seg_list):
         wfc[w]=new_seg_list.count(w)
     print(wfc)
-
     sorted_wfc_list= sorted(wfc.items(), key=lambda x:x[1], reverse=True)
     return sorted_wfc_list
 
@@ -64,5 +63,4 @@ def start():
     outCommentFreToCsv(word_fre_count())
 
 if __name__ == '__main__':
-
     start()

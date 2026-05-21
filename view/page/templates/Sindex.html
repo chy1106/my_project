@@ -6,7 +6,6 @@
             <div class="col-md-12 mb-4 mt-1">
                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                     <h4 class="font-weight-bold">登录微博账户</h4>
-
                 </div>
             </div>
             <div class="col-lg-8 col-md-14">
@@ -22,20 +21,17 @@
                                                     class="btn btn-primary mt-2"
                                                     style="margin-left: 100px;"
                                                     onclick="executeSelenium()">登录微博</button>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center flex-wrap">
                                     <h4 class="font-weight-bold">根据关键词爬取</h4>
-
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -59,26 +55,22 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center flex-wrap">
                                     <h4 class="font-weight-bold">根据微博热词爬取</h4>
-
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <div class="text-right">
-
                                             <button class="btn btn-primary"
                                                     type="button"
                                                     id="confirmBtn2"
                                                     onclick="getHotWordAndSubmit()">
                                                 <i class="fas fa-search mr-1"></i>热词爬取
                                             </button>
-
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +80,6 @@
             </div>
         </div>
     </div>
-
 
 <script>
 async function executeSelenium() {
@@ -120,7 +111,6 @@ try {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
         });
-
         console.log("程序执行完毕");
     } catch (error) {
         console.error("请求失败", error);
@@ -133,14 +123,10 @@ try {
 }
 </script>
 
-
-
 <script>
-
     function getKeywordAndSubmit() {
         // 获取输入框的值并去除前后空格
         var keyword = $('#keywordInput').val().trim();
-
         // 检查是否为空
         if (keyword === '') {
             alert('请输入关键词');
@@ -164,7 +150,6 @@ try {
                 console.log('后端返回:', response);
                 // 恢复按钮状态
                 $('#confirmBtn').html('<i class="fas fa-search mr-1"></i>确认').prop('disabled', false);
-
                 // 显示成功提示
                 showMessage('success', '关键词"' + keyword + '"已提交成功');
             },
@@ -175,9 +160,7 @@ try {
                 // 显示错误提示
                 showMessage('danger', '提交失败，请稍后重试');
             }
-
         });
     }
-
 </script>
 {% endblock %}

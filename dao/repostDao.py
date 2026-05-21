@@ -13,7 +13,6 @@ def getRepost(articleType):
     try:
         con = dbUtil.getCon()
         cursor = con.cursor()
-
         sql = (f"select t_article.region_name as source,t_repost.region_name as target,"
                f"count(*)as VALUE from t_article JOIN t_repost on t_article.id=t_repost.articleId "
                f"where t_article.region_name is not NULL and t_repost.region_name is not NULL "

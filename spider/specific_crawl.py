@@ -5,7 +5,7 @@
 from spider.specific_url_spider import start as urlcrawl
 from spider.specific_article_spider import start as articlecrawl
 from spider.specific_comment_spider import start as commentcrawl
-from spider.sprcific_respost_spider import start as respostcrawl
+from spider.sprcific_repost_spider import start as respostcrawl
 from spider.save_specific_data import saveToDb as saveToDb
 
 

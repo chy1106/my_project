@@ -84,6 +84,5 @@ def start():
     jsonhtml=getJsonHtml(url,cookie)
     parseJson(jsonhtml)
 
-
 if __name__ == '__main__':
     start()

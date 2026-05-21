@@ -63,5 +63,4 @@ def start():
     outCommentFreToCsv(word_fre_count())
 
 if __name__ == '__main__':
-
     start()

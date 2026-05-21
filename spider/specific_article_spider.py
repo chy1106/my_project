@@ -14,13 +14,11 @@ def clear_csv():
     with open("data/specificArticle_data.csv", 'w', encoding='utf8') as f:
         f.truncate()  # 直接截断文件内容
 
-
 def init_csv():
     '''
     初始化操作，判断csv文件是否存在，不存在就创建
     :return:
     '''
-
     with open('data/specificArticle_data.csv', 'w',encoding='utf8',newline='') as file:
         writer = csv.writer(file)
         writer.writerow([
@@ -37,7 +35,6 @@ def init_csv():
             'authorHomeUrl'#用户主页地址
         ])
 
-
 def getAllArticleURLList():
     '''
     获取所有文章URL信息
@@ -50,7 +47,6 @@ def getAllArticleURLList():
             allArticleURL.append(article_url)
     return allArticleURL
 
-
 def extract_target(url):
     # 解析URL并获取路径
     parsed = urlparse(url)
@@ -60,7 +56,6 @@ def extract_target(url):
     # 返回最后一个有效段（若存在）
     return parts[-1] if parts else None
 
-
 def getJsonHtml(refererUrl,urlRequest,cookie):
     '''请求获取html内容，json格式'''
     headers = {
@@ -68,14 +63,12 @@ def getJsonHtml(refererUrl,urlRequest,cookie):
         'cookie': cookie,
         'referer': 'https:' + refererUrl
     }
-
     response=requests.get(url=urlRequest,headers=headers)
     content = response.content.decode('utf-8')
     if response.status_code==200:
         return response.json()
     else:
         return None
-
 
 def parseJson(jsonstr):
     '''
@@ -96,13 +89,9 @@ def parseJson(jsonstr):
         authorHomeUrl='https://weibo.com/u/%s'%jsonstr['user']['id']
     except KeyError:
         return None  # 捕获异常后跳过
-
     writeToCsv([
         id,text_raw,reposts_count,comments_count,attitudes_count,region_name,created_at,articleUrl,authorId,authorName,authorHomeUrl
     ])
-
-
-
 
 def writeToCsv(row):
     '''
@@ -111,7 +100,6 @@ def writeToCsv(row):
     :return:
     '''
     with open('data/specificArticle_data.csv', 'a', encoding='utf8', newline='') as file:
-
         writer= csv.writer(file)
         writer.writerow(row)
 
@@ -131,11 +119,9 @@ def start():
         url= ArticleUrl[0]
         refererUrl=url.strip("[]")
         url1=extract_target(url)
-
         urlRequest='https://weibo.com/ajax/statuses/show?id='+url1+'&locale=zh-CN&isGetLongText=true'
         jsonhtml= getJsonHtml(refererUrl,urlRequest,cookie)
         parseJson(jsonhtml)
-
     print("特定内容爬取结束")
 
 
