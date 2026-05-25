@@ -7,7 +7,6 @@ from PIL import Image
 from matplotlib import pyplot as plt
 from wordcloud import WordCloud
 
-
 def genWordCloudPic(str, outImg):
     """
     生成云图

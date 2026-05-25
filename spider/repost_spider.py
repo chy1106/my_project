@@ -14,12 +14,12 @@ from util.stringUtil import clean_string
 def clear_csv():
     with open("data/repost_data.csv", 'w', encoding='utf8') as f:
         f.truncate()  # 直接截断文件内容
+
 def init_csv():
     '''
     初始化操作，判断csv文件是否存在，不存在就创建
     :return:
     '''
-
     with open('data/repost_data.csv', 'w',encoding='utf8',newline='') as file:
         writer = csv.writer(file)
         writer.writerow([

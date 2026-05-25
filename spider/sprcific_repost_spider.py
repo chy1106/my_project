@@ -14,12 +14,12 @@ from util.stringUtil import clean_string
 def clear_csv():
     with open("data/specificRepost_data.csv", 'w', encoding='utf8') as f:
         f.truncate()  # 直接截断文件内容
+
 def init_csv():
     '''
     初始化操作，判断csv文件是否存在，不存在就创建
     :return:
     '''
-
     with open('data/specificRepost_data.csv', 'w',encoding='utf8',newline='') as file:
         writer = csv.writer(file)
         writer.writerow([
@@ -31,8 +31,6 @@ def init_csv():
             'userName',  # 评论用户名称
             'userHomeUrl'  # 评论用户主页地址
         ])
-
-
 
 def getJsonHtml(url,params,cookie):
     '''请求获取html内容，json格式'''
@@ -57,9 +55,6 @@ def writeToCsv(row):
         writer= csv.writer(file)
         writer.writerow(row)
 
-
-
-
 def parseJson(json,articleId):
     '''
     解析json数据
@@ -74,14 +69,10 @@ def parseJson(json,articleId):
         region_name = repost.get('region_name', '发布于').replace('发布于', '').strip()
         userId=repost['user']['id']
         userName=repost['user']['screen_name']
-
         userHomeUrl='https://weibo.com/u/%s'%repost['user']['id']
-
         writeToCsv([
             articleId,text_raw, created_at,region_name,userId, userName,userHomeUrl
         ])
-
-
 
 def getAllArticleList():
     '''
@@ -89,7 +80,6 @@ def getAllArticleList():
     :return:
     '''
     articleList = []
-
     with open('data/specificArticle_data.csv', 'r', encoding='utf8', newline='') as file:
         reader = csv.reader(file)
         next(reader)
@@ -107,12 +97,10 @@ def readCookie():
 def start():
     cookie = readCookie()
     clear_csv()
-
     url='https://weibo.com/ajax/statuses/repostTimeline'
     init_csv()
     articleList = getAllArticleList()
     print("转发信息爬取开始")
-
     for article in articleList:
         reposts_count =int (article[2])
         page = 1
@@ -140,7 +128,6 @@ def start():
             jsonHtml= getJsonHtml(url,params,cookie)
             if jsonHtml:
                 parseJson(jsonHtml,article[0])
-
     print("转发信息爬取结束")
 
 if __name__ == '__main__':

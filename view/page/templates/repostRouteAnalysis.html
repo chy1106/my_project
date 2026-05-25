@@ -5,7 +5,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
@@ -22,7 +21,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-
                     <div class="table-responsive">
                         <table id="datatable-1" class="table data-table table-striped table-bordered">
                             <thead>
@@ -37,7 +35,6 @@
                             <tbody>
                             {% for repost in repostList %}
                                 <tr>
-
                                     <!--文章ID-->
                                     <td style="width:50px">{{ repost[0] }}</td>
                                     <td class="text-center" style="width:100px">{{ repost[1] }}</td>
@@ -53,7 +50,6 @@
                         </table>
                     </div>
                 </div>
-
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div class="header-title">
                         <h4 class="card-title">关键词微博转发分析 - 地域传播图</h4>
@@ -68,8 +64,6 @@
                         </button>
                     </div>
                 </div>
-
-
                 <div class="card-body">
                     <!-- 图表容器 -->
                     <div id="repostMapChart" style="width: 100%; height: 700px;"></div>
@@ -83,21 +77,16 @@
 {% block echarts %}
     <!--引入本地 china.js -->
     <script src="{{ url_for('static', filename='js/china.js') }}"></script>
-
     <script>
     var myChart = null;
-
     function initMapChart() {
-
         const chartDom = document.getElementById('repostMapChart');
-
         // 强制设置图表容器样式
         chartDom.style.display = 'block';
         chartDom.style.width = '100%';
         chartDom.style.height = '700px';
         chartDom.style.visibility = 'visible';
         chartDom.style.opacity = '1';
-
         // 延迟执行，确保 DOM 样式应用完毕
         setTimeout(() => {
             try {
@@ -107,17 +96,13 @@
                     const maps = Object.keys(echarts.maps || {});
                     throw new Error(`地图 'china' 未注册！已注册: [ ${maps.join(', ')} ]`);
                 }
-
                 console.log("地图资源准备就绪，开始渲染...");
-
                 // 销毁旧实例防止内存泄漏或重叠
                 if (myChart) {
                     myChart.dispose();
                 }
-
                 // 初始化
                 myChart = echarts.init(chartDom);
-
                 fetch('/page/repostRouteAnalysis')
                     .then(response => {
                 if (!response.ok) {
@@ -130,37 +115,28 @@
                 if (data.nodes && data.nodes.length > 0) {
                     renderChart(data.nodes, data.edges);
                 }
-
                 console.log(` 加载成功：${nodes.length} 个节点，${edges.length} 条连线`);
                 renderChart(nodes, edges);
             })
-
-
                 //先打印尺寸，再切换显示状态
                 const width = chartDom.offsetWidth;
                 const height = chartDom.offsetHeight;
                 console.log(`容器当前尺寸: ${width} x ${height}`);
-
-
                 // 再次强制 resize，确保在 display:block 后重新计算
                 setTimeout(() => {
                     myChart.resize();
                     console.log("地图渲染完成并调整大小！");
                 }, 50);
-
             } catch (err) {
                 console.error("渲染失败:", err);
-
             }
         }, 300); //延长延迟
     }
-
     function renderChart(nodes, edges) {
         const geoCoordMap = {};
         nodes.forEach(node => {
             geoCoordMap[node.name] = node.value;
         });
-
         const convertData = (data) => {
             return data.map(item => {
                 const from = geoCoordMap[item.source];
@@ -177,13 +153,9 @@
                 return null;
             }).filter(i => i !== null);
         };
-
         const lineData = convertData(edges);
-
-
         const isDark = document.body.classList.contains('dark') ||
                        (window.getComputedStyle(document.body).backgroundColor === 'rgb(11, 15, 25)');
-
         const colors = {
             bg: isDark ? '#0b0f19' : '#ffffff',
             text: isDark ? '#ffffff' : '#333333',
@@ -192,7 +164,6 @@
             line: isDark ? '#ffeb3b' : '#d93025',
             effect: isDark ? '#ffeb3b' : '#d93025'
         };
-
         myChart.setOption({
             backgroundColor: colors.bg,
             tooltip: {
@@ -268,12 +239,10 @@
             ]
         });
     }
-
     // 窗口大小自适应
     window.addEventListener('resize', () => {
         if(myChart) myChart.resize();
     });
-
     // 页面加载完成后启动
     document.addEventListener('DOMContentLoaded', initMapChart);
     </script>

@@ -78,7 +78,6 @@
         var chartDom = document.getElementById('zfmain');
         var myChart = echarts.init(chartDom);
         var option;
-
         option = {
             title: {
                 text: '转发量区间分析图'
@@ -89,7 +88,6 @@
                     type: 'shadow'
                 }
             },
-
             legend: {},
             grid: {
                 left: '3%',
@@ -113,24 +111,19 @@
                 }
             ]
         };
-
         option && myChart.setOption(option);
     </script>
 
     <script>
     var myChart = null;
-
     function initMapChart() {
-
         const chartDom = document.getElementById('repostMapChart');
-
         // 强制设置图表容器样式
         chartDom.style.display = 'block';
         chartDom.style.width = '100%';
         chartDom.style.height = '700px';
         chartDom.style.visibility = 'visible';
         chartDom.style.opacity = '1';
-
         // 延迟执行，确保 DOM 样式应用完毕
         setTimeout(() => {
             try {
@@ -140,20 +133,15 @@
                     const maps = Object.keys(echarts.maps || {});
                     throw new Error(`地图 'china' 未注册！已注册: [ ${maps.join(', ')} ]`);
                 }
-
                 console.log("地图资源准备就绪，开始渲染...");
-
                 // 销毁旧实例防止内存泄漏或重叠
                 if (myChart) {
                     myChart.dispose();
                 }
-
                 // 初始化
                 myChart = echarts.init(chartDom);
-
                 // 获取当前页面的arcType
                 const currentArcType = "{{ defaultArcType }}";
-
                 // 发起请求
                 fetch('/page/repostAnalysis?arcType=' + encodeURIComponent(currentArcType))
                     .then(response => {
@@ -176,14 +164,11 @@
             }
         }, 300);
     }
-
-
     function renderChart(nodes, edges) {
         const geoCoordMap = {};
         nodes.forEach(node => {
             geoCoordMap[node.name] = node.value;
         });
-
         const convertData = (data) => {
             return data.map(item => {
                 const from = geoCoordMap[item.source];
@@ -200,13 +185,9 @@
                 return null;
             }).filter(i => i !== null);
         };
-
         const lineData = convertData(edges);
-
-
         const isDark = document.body.classList.contains('dark') ||
                        (window.getComputedStyle(document.body).backgroundColor === 'rgb(11, 15, 25)');
-
         const colors = {
             bg: isDark ? '#0b0f19' : '#ffffff',
             text: isDark ? '#ffffff' : '#333333',
@@ -215,7 +196,6 @@
             line: isDark ? '#ffeb3b' : '#d93025',
             effect: isDark ? '#ffeb3b' : '#d93025'
         };
-
         myChart.setOption({
             backgroundColor: colors.bg,
             tooltip: {
@@ -291,12 +271,10 @@
             ]
         });
     }
-
     // 窗口大小自适应
     window.addEventListener('resize', () => {
         if(myChart) myChart.resize();
     });
-
     // 页面加载完成后启动
     document.addEventListener('DOMContentLoaded', initMapChart);
     </script>
@@ -304,9 +282,7 @@
     <script>
     $(document).ready(function() {
     // 获取当前页面的arcType
-
     var currentType = "{{ defaultArcType }}";
-
     // 发起AJAX请求去调用repostAnalysis
     $.ajax({
         url: '/page/repostAnalysis',
@@ -315,7 +291,6 @@
         success: function(response) {
             //拿到数据后，渲染图表
             console.log("收到转发数据:", response);
-
         }
     });
 });

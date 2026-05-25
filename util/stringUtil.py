@@ -4,7 +4,6 @@
 # @Project : weiboProject
 import re
 
-
 def remove_all_tags(html_text):
     '''
     去除文本中所有HTML标签

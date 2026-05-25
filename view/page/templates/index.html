@@ -6,7 +6,6 @@
             <div class="col-md-12 mb-4 mt-1">
                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                     <h4 class="font-weight-bold">首页</h4>
-
                 </div>
             </div>
             <div class="col-lg-8 col-md-12">
@@ -19,7 +18,6 @@
                                         <p class="mb-2 text-secondary">微博文章总量</p>
                                         <div class="d-flex flex-wrap justify-content-start align-items-center">
                                             <h5 class="mb-0 font-weight-bold" id="totalArticle">无数据</h5>
-
                                         </div>
                                     </div>
                                 </div>
@@ -34,7 +32,6 @@
                                         <p class="mb-2 text-secondary">最高点赞微博-作者</p>
                                         <div class="d-flex flex-wrap justify-content-start align-items-center">
                                             <h5 class="mb-0 font-weight-bold" id="topAuthor">无数据</h5>
-
                                         </div>
                                     </div>
                                 </div>
@@ -49,7 +46,6 @@
                                         <p class="mb-2 text-secondary">微博点赞最多-城市</p>
                                         <div class="d-flex flex-wrap justify-content-start align-items-center">
                                             <h5 class="mb-0 font-weight-bold" id="topRegion">无数据</h5>
-
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +57,6 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center flex-wrap">
                                     <h4 class="font-weight-bold">最近七天微博发布量</h4>
-
                                 </div>
                                 <div id="article7fbl" style="width: 100%;height: 300px" class="custom-chart"></div>
                             </div>
@@ -81,7 +76,6 @@
                         </ul>
                     </div>
                 </div>
-
             </div>
             <div class="col-lg-7 col-md-6">
                 <div class="card">
@@ -99,7 +93,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <!-- Page end  -->
     </div>
@@ -113,7 +106,6 @@
                 return str;
             }
         }
-
         function getHomePageData(){
             $.get('/page/homePageData',function (result){
                 $('#totalArticle').text(result.totalArticle+'个')
@@ -143,15 +135,12 @@
                 getHomePageData()
             }, 300000) // 5分钟执行一次
         })
-
-
     </script>
 
     <script>
         var chartDom=document.getElementById('article7fbl')
         var myChart=echarts.init(chartDom)//初始化
         var options;
-
         option = {
           xAxis: {
               name: '发布日期',
@@ -178,7 +167,6 @@
         var chartDom = document.getElementById('articleTypeZb');
         var myChart = echarts.init(chartDom);
         var option;
-
         option = {
             title: {
                 left: 'center'
@@ -207,11 +195,6 @@
                 }
             ]
         };
-
         option && myChart.setOption(option);
     </script>
-
-
-
-
 {% endblock %}

@@ -9,7 +9,6 @@ import time
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options
 
-
 edge_options = Options()
 edge_options.binary_location = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 driver = webdriver.Edge(options=edge_options)

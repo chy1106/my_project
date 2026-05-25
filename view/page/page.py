@@ -15,7 +15,6 @@ from spider.specific_crawl import  start as specificCrawl
 from fenci.commentFenci import start as startFenci
 from fenci.specificCommentFenci import start as keywordFenci
 
-
 from util import wordcloudUtil
 
 pb=Blueprint('page',__name__,url_prefix='/page',template_folder='templates')

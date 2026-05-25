@@ -21,7 +21,6 @@ def init_csv():
     初始化操作，判断csv文件是否存在，不存在就创建
     :return:
     '''
-
     with open('data/article_data.csv', 'w',encoding='utf8',newline='') as file:
         writer = csv.writer(file)
         writer.writerow([

@@ -6,7 +6,6 @@
             <div class="col-md-12 mb-4 mt-1">
                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                     <h4 class="font-weight-bold">微博热词分析</h4>
-
                 </div>
             </div>
             <div class="col-lg-12 col-md-12">
@@ -44,7 +43,6 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -63,7 +61,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-
                         <div class="table-responsive">
                             <table id="datatable-1" class="table data-table table-striped table-bordered">
                                 <thead>
@@ -104,7 +101,6 @@
         var chartDom = document.getElementById('hotWordMain');
         var myChart = echarts.init(chartDom);
         var option;
-
         option = {
             title: {
                 text: '热词数量分布日期统计',
@@ -166,7 +162,6 @@
                 }
             ]
         };
-
         option && myChart.setOption(option);
     </script>
 {% endblock %}

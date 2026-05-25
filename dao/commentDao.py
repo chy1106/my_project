@@ -7,7 +7,6 @@
 '''
 from util import dbUtil
 
-
 def getAllComment():
     '''
     获取所有评论信息

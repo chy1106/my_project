@@ -8,7 +8,6 @@
 from entity.UserModel import User
 from util import dbUtil
 
-
 def login(user:User):
     '''登录判断'''
     con = None
