@@ -74,20 +74,28 @@ def parseJson(json,articleId):
             articleId,text_raw, created_at,region_name,userId, userName,userHomeUrl
         ])
 
+#每个articleType最多爬取的文章数
+PER_TYPE_LIMIT = 5
 
-
-def getAllArticleList():
+def getArticlesForRepost(per_type=PER_TYPE_LIMIT):
     '''
-    获取所有信息
-    :return:
+    从 article_data.csv 按 articleType 分组，每类取 per_type 篇用于爬转发
+    :return: 待爬文章列表（保持 CSV 中的原始顺序）
     '''
-    articleList = []
+    type_count = {}
+    article_list = []
     with open('data/article_data.csv', 'r', encoding='utf8', newline='') as file:
         reader = csv.reader(file)
         next(reader)
         for article in reader:
-            articleList.append(article)
-    return articleList
+            if len(article) < 8:
+                continue
+            article_type = article[7]
+            if type_count.get(article_type, 0) >= per_type:
+                continue
+            type_count[article_type] = type_count.get(article_type, 0) + 1
+            article_list.append(article)
+    return article_list
 
 #读取cookie
 def readCookie():
@@ -96,26 +104,24 @@ def readCookie():
         for cookie in reader:
             return cookie[0]
 
-def start():
+def start(per_type=PER_TYPE_LIMIT):
     cookie = readCookie()
     clear_csv()
     url='https://weibo.com/ajax/statuses/repostTimeline'
     init_csv()
-    articleList = getAllArticleList()
-    print("转发信息爬取开始")
-    index=0
-    for article in articleList:
-        if index>=100:
-            break
-        print("正在爬取【%s】的转发信息"%article[1])
+    article_list = getArticlesForRepost(per_type)
+    type_num = len({article[7] for article in article_list})
+    print("转发信息爬取开始：%d 个分类，每类最多 %d 篇，共 %d 篇" % (type_num, per_type, len(article_list)))
+    for article in article_list:
+        print("正在爬取【%s】微博 %s 的转发信息" % (article[7], article[0]))
         params={
             'id':article[0],
             'page':1
         }
         jsonHtml= getJsonHtml(url,params,cookie)
-        index=index+1
         if jsonHtml:
             parseJson(jsonHtml,article[0])
+        time.sleep(0.5)
     print("转发信息爬取结束")
 
 if __name__ == '__main__':

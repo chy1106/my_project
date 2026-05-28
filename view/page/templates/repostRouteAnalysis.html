@@ -81,27 +81,27 @@
     var myChart = null;
     function initMapChart() {
         const chartDom = document.getElementById('repostMapChart');
-        // 强制设置图表容器样式
+
         chartDom.style.display = 'block';
         chartDom.style.width = '100%';
         chartDom.style.height = '700px';
         chartDom.style.visibility = 'visible';
         chartDom.style.opacity = '1';
-        // 延迟执行，确保 DOM 样式应用完毕
+
         setTimeout(() => {
             try {
-                // 检查环境
+
                 if (typeof echarts === 'undefined') throw new Error("ECharts 库未加载");
                 if (!echarts.getMap('china')) {
                     const maps = Object.keys(echarts.maps || {});
                     throw new Error(`地图 'china' 未注册！已注册: [ ${maps.join(', ')} ]`);
                 }
                 console.log("地图资源准备就绪，开始渲染...");
-                // 销毁旧实例防止内存泄漏或重叠
+
                 if (myChart) {
                     myChart.dispose();
                 }
-                // 初始化
+
                 myChart = echarts.init(chartDom);
                 fetch('/page/repostRouteAnalysis')
                     .then(response => {
@@ -118,11 +118,11 @@
                 console.log(` 加载成功：${nodes.length} 个节点，${edges.length} 条连线`);
                 renderChart(nodes, edges);
             })
-                //先打印尺寸，再切换显示状态
+
                 const width = chartDom.offsetWidth;
                 const height = chartDom.offsetHeight;
                 console.log(`容器当前尺寸: ${width} x ${height}`);
-                // 再次强制 resize，确保在 display:block 后重新计算
+
                 setTimeout(() => {
                     myChart.resize();
                     console.log("地图渲染完成并调整大小！");
@@ -130,7 +130,7 @@
             } catch (err) {
                 console.error("渲染失败:", err);
             }
-        }, 300); //延长延迟
+        }, 300);
     }
     function renderChart(nodes, edges) {
         const geoCoordMap = {};

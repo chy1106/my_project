@@ -17,7 +17,7 @@ from util.stringUtil import clean_string
 
 def clear_csv():
     with open("data/specificComment_data.csv", 'w', encoding='utf8') as f:
-        f.truncate()  # 直接截断文件内容
+        f.truncate()
 
 def init_csv():
     '''
@@ -100,7 +100,6 @@ def getAllArticleList():
             articleList.append(article)
     return articleList
 
-#读取cookie
 def readCookie():
     with open('data/Cookie.csv', 'r', encoding='utf8', newline='') as file:
         reader = csv.reader(file)

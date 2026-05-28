@@ -17,7 +17,7 @@
     <div class="iq-sidebar  sidebar-default  ">
         <div class="iq-sidebar-logo d-flex align-items-end justify-content-between">
             <a href="" class="header-logo">
-                <span>微博舆情数据分析</span>
+                <span style="font-size: 13px; white-space: nowrap;">微博定向爬取与信息抽取系统</span>
             </a>
             <div class="side-menu-bt-sidebar-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="text-light wrapper-menu" width="30" fill="none"
@@ -30,7 +30,7 @@
         <div class="data-scrollbar" data-scroll="1">
             <nav class="iq-sidebar-menu">
                 <ul id="iq-sidebar-toggle" class="side-menu">
-                    <li class="active sidebar-layout">
+                    <li class="{% if request.path == '/page/home' %}active {% endif %}sidebar-layout">
                         <a href="/page/home" class="svg-icon">
                             <i class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24"
@@ -45,7 +45,7 @@
                     <li class="px-3 pt-3 pb-2">
                         <span class="text-uppercase small font-weight-bold">登录微博账户</span>
                     </li>
-                    <li class="active sidebar-layout">
+                    <li class="{% if request.path == '/page/weiboLogin' %}active {% endif %}sidebar-layout">
                         <a href="/page/weiboLogin" class="svg-icon">
                             <i class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24"
@@ -60,7 +60,7 @@
                     <li class="px-3 pt-3 pb-2">
                         <span class="text-uppercase small font-weight-bold">微博关键词分析</span>
                     </li>
-                    <li class=" sidebar-layout">
+                    <li class="{% if request.path == '/page/specificArticleData' %}active {% endif %}sidebar-layout">
                         <a href="/page/specificArticleData" class="svg-icon">
                             <i class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24"
@@ -72,7 +72,7 @@
                             <span class="ml-2">微博文章分析</span>
                         </a>
                     </li>
-                    <li class=" sidebar-layout">
+                    <li class="{% if request.path == '/page/specificCommentData' %}active {% endif %}sidebar-layout">
                         <a href="/page/specificCommentData" class="svg-icon">
                             <i class="">
                                 <svg class="svg-icon" id="iq-chart-1" width="18" xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +85,7 @@
                             <span class="ml-2">微博评论分析</span>
                         </a>
                     </li>
-                    <li class=" sidebar-layout">
+                    <li class="{% if request.path == '/page/specificRepostData' %}active {% endif %}sidebar-layout">
                         <a href="/page/specificRepostData" class="svg-icon">
                             <i class="">
                                 <svg class="svg-icon" id="iq-chart-1" width="18" xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +101,7 @@
                     <li class="px-3 pt-3 pb-2 ">
                         <span class="text-uppercase small font-weight-bold">微博热词分析</span>
                     </li>
-                    <li class=" sidebar-layout">
+                    <li class="{% if request.path == '/page/articleData' %}active {% endif %}sidebar-layout">
                         <a href="/page/articleData" class="svg-icon">
                             <i class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24"
@@ -113,7 +113,7 @@
                             <span class="ml-2">热词文章分析</span>
                         </a>
                     </li>
-                    <li class=" sidebar-layout">
+                    <li class="{% if request.path == '/page/hotWord' %}active {% endif %}sidebar-layout">
                         <a href="/page/hotWord" class="svg-icon ">
                             <i class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24"
@@ -125,7 +125,7 @@
                             <span class="ml-2">微博热词统计</span>
                         </a>
                     </li>
-                    <li class=" sidebar-layout">
+                    <li class="{% if request.path == '/page/articleDataAnalysis' %}active {% endif %}sidebar-layout">
                         <a href="/page/articleDataAnalysis" class="svg-icon">
                             <i class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24"
@@ -137,7 +137,7 @@
                             <span class="ml-2">文章转发分析</span>
                         </a>
                     </li>
-                    <li class=" sidebar-layout">
+                    <li class="{% if request.path == '/page/commentDataAnalysis' %}active {% endif %}sidebar-layout">
                         <a href="/page/commentDataAnalysis" class="svg-icon">
                             <i class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24"

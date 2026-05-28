@@ -17,7 +17,7 @@ from spider.repost_spider import start as repostspiderStart
 
 engine=create_engine('mysql+pymysql://root:123456@localhost:3306/weibo?charset=utf8')
 '''
-持久化到数据库，先合并数据库和csv文件，去重，最后存数据库，删除csv文件
+持久化到数据库，先合并数据库和csv文件，去重存数据库
 :return:
 '''
 def saveToDb():
@@ -47,10 +47,8 @@ def saveToDb():
         newRepostCsv = pd.read_csv('data/repost_data.csv')
         '''合并'''
         concatRepostPd = pd.concat([newRepostCsv, oldRepostDb])
-        '''id去重'''
-        resultRepostPd = concatRepostPd.drop_duplicates(subset='articleId', keep='last')
         '''存库'''
-        resultRepostPd.to_sql('s_repost', con=engine, if_exists='replace', index=False)
+        concatRepostPd.to_sql('t_repost', con=engine, if_exists='replace', index=False)
     except Exception as e:
         print("异常",e)
         traceback.print_exc()

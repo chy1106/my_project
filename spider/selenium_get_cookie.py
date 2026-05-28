@@ -18,14 +18,13 @@ cookieStr = driver.get_cookies()
 oldCookie=cookieStr
 while cookieStr==oldCookie:
     cookieStr = driver.get_cookies()
-    # 按cookie格式 定义目标顺序
+    #按cookie格式 定义目标顺序
     target_order = ['SCF', 'SUB', 'SUBP', 'ALF', 'XSRF-TOKEN', 'WBPSESS']
-    # 按照目标顺序筛选并排序cookie
+    #按照目标顺序筛选并排序cookie
     ordered_cookies = [cookie for cookie in cookieStr if cookie['name'] in target_order]
     ordered_cookies.sort(key=lambda x: target_order.index(x['name']))
-    # 生成格式化的cookie字符串
+    #生成格式化的cookie字符串
     cookie_string = "; ".join([f"{cookie['name']}={cookie['value']}" for cookie in ordered_cookies])
-    #clear_csv()
     if cookie_string !="":
         with open('data/Cookie.csv', 'w', encoding='utf8', newline='') as file:
             writer = csv.writer(file)

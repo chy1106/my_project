@@ -12,7 +12,7 @@ from util.stringUtil import clean_string
 
 def clear_csv():
     with open("data/specificArticle_data.csv", 'w', encoding='utf8') as f:
-        f.truncate()  # 直接截断文件内容
+        f.truncate()
 
 def init_csv():
     '''
@@ -48,12 +48,12 @@ def getAllArticleURLList():
     return allArticleURL
 
 def extract_target(url):
-    # 解析URL并获取路径
+    #解析URL并获取路径
     parsed = urlparse(url)
     path = parsed.path
-    # 分割路径并过滤空段
+    #分割路径并过滤空段
     parts = [part for part in path.split('/') if part]
-    # 返回最后一个有效段（若存在）
+    #返回最后一个有效段
     return parts[-1] if parts else None
 
 def getJsonHtml(refererUrl,urlRequest,cookie):

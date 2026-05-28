@@ -93,7 +93,7 @@ def getArticleTopZan():
     try:
         con = dbUtil.getCon()
         cursor = con.cursor()
-        sql="select text_raw,attitudes_count from t_article order by attitudes_count desc limit 0,6"
+        sql="select text_raw,attitudes_count from t_article order by cast(attitudes_count as unsigned) desc limit 6"
         cursor.execute(sql)
         return cursor.fetchall()
     except Exception as e:

@@ -224,7 +224,7 @@ def run_hotSpider():
 def scrape_keyword():
     """接收前端发送的关键词并启动爬虫"""
     try:
-        # 获取前端发送的JSON数据
+        #获取前端发送的JSON数据
         data = request.get_json()
         #从JSON中获取关键词
         keyword = data.get('keyword')
@@ -235,7 +235,7 @@ def scrape_keyword():
             }), 400
         print(f"接收到关键词: {keyword}")
         specificCrawl(keyword)
-        # 返回成功响应
+        #返回成功响应
         return jsonify({
             'success': True,
             'message': f'成功接收关键词: {keyword}'
